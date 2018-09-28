@@ -15,16 +15,19 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'machakann/vim-highlightedyank'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-clang', { 'do': ':UpdateRemotePlugins' }
+" Plug 'zchee/deoplete-clang', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/deoplete-clangx', { 'for': ['c', 'cpp'] }
+Plug 'zchee/libclang-python3'
 Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 Plug 'eagletmt/neco-ghc'
-Plug 'copy/deoplete-ocaml'
+Plug 'copy/deoplete-ocaml', { 'for': 'ocaml' }
 Plug 'rust-lang/rust.vim'
 " Plug 'sebastianmarkow/deoplete-rust'
 Plug 'racer-rust/vim-racer'
+Plug 'scrooloose/syntastic', {'for': ['c', 'cpp']}
 " Plug 'w0rp/ale'
-Plug 'neomake/neomake'
+Plug 'neomake/neomake', {'for': ['ocaml', 'python', 'rust']}
 Plug 'vim-airline/vim-airline'
 Plug 'wincent/command-t', {
     \   'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
@@ -140,7 +143,7 @@ set updatetime=100
 " set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 
 " ocaml settings
-set rtp+=/home/pb/.opam/system/share/merlin/vim
+set rtp+=/home/bit-wangler/.opam/system/share/merlin/vim
 
 map <space> <leader>
 " Leader key mapping to ;
@@ -236,14 +239,14 @@ let g:deoplete#auto_completion_delay = 3
 let g:tern_request_timeout = 1
 
 " clang
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so.1'
-let g:deoplete#sources#clang#clang_header ='/usr/lib/clang/'
-let g:deoplete#sources#clang#sort_algo = 'priority'
-" let g:deoplete#sources#clang#std#cpp = 'c++1z'
-let g:deoplete#omni_patterns = {}
-let g:deoplete#omni_patterns.cpp = '[^. *\t]\.\w*|[^. *\t]\::\w*|[^. *\t]\->\w*|#include\s*[<"][^>"]*'
-let g:deoplete#omni#input_patterns={}
-let g:deoplete#omni#input_patterns.cpp = ['[^. *\t]\.\w*','[^. *\t]\::\w*','[^. *\t]\->\w*','#include\s*[<"][^>"]*']
+" let g:deoplete#sources#clang#libclang_path = '/usr/lib/libclang.so.6.0'
+" let g:deoplete#sources#clang#clang_header = '/usr/include/clang/'
+" let g:deoplete#sources#clang#sort_algo = 'priority'
+" let g:deoplete#sources#clang#clang_complete_database = './Build'
+" let g:deoplete#omni_patterns = {}
+" let g:deoplete#omni_patterns.cpp = '[^. *\t]\.\w*|[^. *\t]\::\w*|[^. *\t]\->\w*|#include\s*[<"][^>"]*'
+" let g:deoplete#omni#input_patterns={}
+" let g:deoplete#omni#input_patterns.cpp = ['[^. *\t]\.\w*','[^. *\t]\::\w*','[^. *\t]\->\w*','#include\s*[<"][^>"]*']
 " let g:clang_close_preview = 1
 
 " show documentation when selecting python auto-completion.
@@ -252,7 +255,7 @@ let g:deoplete#sources#jedi#show_docstring = 1
 " Ocaml
 let g:deoplete#ignore_sources = {}
 let g:deoplete#ignore_sources.ocaml = ['buffer', 'around', 'member', 'tag']
-let g:deoplete#omni_patterns.ocaml = '[^ ,;\t\[()\]]'
+" let g:deoplete#omni_patterns.ocaml = '[^ ,;\t\[()\]]'
 
 " Rust
 let g:racer_cmd = "/home/pb/.cargo/bin/racer"
@@ -270,18 +273,35 @@ inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 "neomake
 " Run NeoMake on read and write operations
-autocmd! BufReadPost,BufWritePost * Neomake
-let g:neomake_open_list = 2
+if &filetype == 'c' || &filetype == 'cpp'
+    autocmd! BufReadPost,BufWritePost * Neomake
+    let g:neomake_open_list = 2
+endif
 
 " ale
-" let g:ale_sign_error = '⨉'
-" let g:ale_sign_warning = '⚠'
+" let g:ale_sign_error = '>>'
+" let g:ale_sign_warning = '__'
 " let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '']
 " let g:ale_lint_on_text_changed = 0
 " let g:ale_lint_on_save = 1
+" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+" nmap <silent> <C-j> <Plug>(ale_next_wrap)
+" let g:ale_echo_msg_error_str = 'E'
+" let g:ale_echo_msg_warning_str = 'W'
+" let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+" syntastic
+let g:syntastic_always_populate_loc_list=1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+let g:syntastic_style_error_symbol = '✗'
+let g:syntastic_style_warning_symbol = '⚠'
+let g:syntastic_auto_loc_list=1
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_check_on_wq = 0
 
 " Set this. Airline will handle the rest.
-let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#syntastic#enabled = 1
 
 " this is for the airline
 let g:airline_powerline_fonts = 1

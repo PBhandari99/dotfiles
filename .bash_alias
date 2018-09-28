@@ -37,6 +37,8 @@ alias ln='ln -i'
 
 alias ff='firefox'
 alias chrome='chromium'
+alias setting='cinnamon-settings'
+
 export QT_STYLE_OVERRIDE=gtk
 export QT_SELECT=qt5
 
