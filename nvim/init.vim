@@ -5,8 +5,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'yuttie/comfortable-motion.vim'
-Plug 'PBhandari99/nofrils'
-Plug 'reedes/vim-colors-pencil'
+" Plug 'PBhandari99/nofrils'
+" Plug 'reedes/vim-colors-pencil'
+Plug 'morhetz/gruvbox'
 " Plug 'owickstrom/vim-colors-paramount'
 " Plug 'mhartington/oceanic-next'
 " Plug 'junegunn/seoul256.vim'
@@ -25,6 +26,7 @@ Plug 'copy/deoplete-ocaml', { 'for': 'ocaml' }
 Plug 'rust-lang/rust.vim'
 " Plug 'sebastianmarkow/deoplete-rust'
 Plug 'racer-rust/vim-racer'
+Plug 'wlangstroth/vim-racket', { 'for': 'racket' }
 Plug 'scrooloose/syntastic', {'for': ['c', 'cpp']}
 " Plug 'w0rp/ale'
 Plug 'neomake/neomake', {'for': ['ocaml', 'python', 'rust']}
@@ -39,8 +41,12 @@ call plug#end()
 set termguicolors
 syntax enable
 filetype plugin indent on
+" colorscheme nofrils-dark
 set background=dark
-colorscheme nofrils-dark
+colorscheme gruvbox
+" let g:gruvbox_contrast_dark='soft'
+let g:gruvbox_italic = 1
+let g:gruvbox_italicize_strings=1
 " colorscheme paramount
 " colorscheme OceanicNext
 " let g:seoul256_background = 235
@@ -278,6 +284,11 @@ if &filetype == 'c' || &filetype == 'cpp'
     let g:neomake_open_list = 2
 endif
 
+if has("autocmd")
+  au BufReadPost *.rkt,*.rktl set filetype=racket
+  au filetype racket set lisp
+endif
+
 " ale
 " let g:ale_sign_error = '>>'
 " let g:ale_sign_warning = '__'
@@ -299,14 +310,14 @@ let g:syntastic_style_warning_symbol = '⚠'
 let g:syntastic_auto_loc_list=1
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_racket_checkers = ['racket', 'scheme']
 
 " Set this. Airline will handle the rest.
 let g:airline#extensions#syntastic#enabled = 1
 
 " this is for the airline
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'pencil'
-" let g:airline_theme='oceanicnext'
+" let g:airline_theme='gruvbox.vim'
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
 " Show just the filename

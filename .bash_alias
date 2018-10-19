@@ -6,6 +6,7 @@ alias ls='ls --color=auto'
 
 alias pacrepo='sudo reflector -l 20 -f 10 --save /etc/pacman.d/mirrorlist'
 alias pacman='sudo pacman'
+alias 'pacman-rm'='sudo pacman -Rncs'
 alias yaourt='sudo yaourt'
 alias journalctl='sudo journalctl'
 alias pacu='sudo pacman -Syu --noconfirm'
