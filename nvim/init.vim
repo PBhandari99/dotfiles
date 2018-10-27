@@ -31,6 +31,7 @@ Plug 'scrooloose/syntastic', {'for': ['c', 'cpp']}
 " Plug 'w0rp/ale'
 Plug 'neomake/neomake', {'for': ['ocaml', 'python', 'rust']}
 Plug 'vim-airline/vim-airline'
+Plug 'sbdchd/neoformat'
 Plug 'wincent/command-t', {
     \   'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
     \ }
