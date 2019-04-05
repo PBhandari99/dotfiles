@@ -8,11 +8,13 @@ alias pacrepo='sudo reflector -l 20 -f 10 --save /etc/pacman.d/mirrorlist'
 alias pacman='sudo pacman'
 alias 'pacman-rm'='sudo pacman -Rncs'
 alias yaourt='sudo yaourt'
+alias apt='sudo apt'
 alias journalctl='sudo journalctl'
 alias pacu='sudo pacman -Syu --noconfirm'
 alias auru='yaourt -Syua --noconfirm'
 alias systemctl='sudo systemctl'
 alias se='ls /usr/bin | grep'
+alias cat='bat'
 
 alias ls='ls --color=auto'
 alias la='ls -a'
@@ -25,8 +27,10 @@ alias myip='curl http://ipecho.net/plain; echo'
 alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
+alias vimrc='vim ~/.config/nvim/init.vim'
 alias sv='sudo nvim'
 alias c='clear'
+alias e='exit'
 alias diff='colordiff'
 
 # do not delete / or prompt if deleting more than 3 files at a time #
@@ -35,6 +39,9 @@ alias rm='rm -I --preserve-root'
 alias mv='mv -i'
 alias cp='cp -i'
 alias ln='ln -i'
+
+# mysql
+alias sql='mysql -h localhost -u root -pHe110SQL'
 
 alias ff='firefox'
 alias chrome='chromium'
@@ -46,4 +53,3 @@ export QT_SELECT=qt5
 if [[ $LANG = '' ]]; then
 	export LANG=en_US.UTF-8
 fi
-

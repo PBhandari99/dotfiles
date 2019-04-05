@@ -2,7 +2,8 @@ call plug#begin('~/.nvim/plugged')
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" for file overview, function defination and classes.
+Plug 'majutsushi/tagbar', "{ 'on': 'TagbarToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'yuttie/comfortable-motion.vim'
 " Plug 'PBhandari99/nofrils'
@@ -16,25 +17,26 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'machakann/vim-highlightedyank'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'zchee/deoplete-clang', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/deoplete-clangx', { 'for': ['c', 'cpp'] }
-Plug 'zchee/libclang-python3'
+" Plug 'zchee/libclang-python3'
 Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
-Plug 'eagletmt/neco-ghc'
+" Plug 'eagletmt/neco-ghc'
 Plug 'copy/deoplete-ocaml', { 'for': 'ocaml' }
-Plug 'rust-lang/rust.vim'
+" Plug 'rust-lang/rust.vim'
+Plug 'zchee/deoplete-go', { 'do': 'make'}
+Plug 'fatih/vim-go',  { 'do': ':GoUpdateBinaries' }
 " Plug 'sebastianmarkow/deoplete-rust'
-Plug 'racer-rust/vim-racer'
-Plug 'wlangstroth/vim-racket', { 'for': 'racket' }
-Plug 'scrooloose/syntastic', {'for': ['c', 'cpp']}
-" Plug 'w0rp/ale'
-Plug 'neomake/neomake', {'for': ['ocaml', 'python', 'rust']}
+" Plug 'racer-rust/vim-racer'
+" Plug 'wlangstroth/vim-racket', { 'for': 'racket' }
+" Plug 'scrooloose/syntastic', {'for': ['c', 'cpp']}
+Plug 'w0rp/ale'
+" Plug 'neomake/neomake'
 Plug 'vim-airline/vim-airline'
 Plug 'sbdchd/neoformat'
-Plug 'wincent/command-t', {
-    \   'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
-    \ }
+" Plug 'wincent/command-t', {
+    " \   'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
+    " \ }
 
 call plug#end()
 
@@ -43,11 +45,14 @@ set termguicolors
 syntax enable
 filetype plugin indent on
 " colorscheme nofrils-dark
+"
 set background=dark
 colorscheme gruvbox
-" let g:gruvbox_contrast_dark='soft'
-let g:gruvbox_italic = 1
-let g:gruvbox_italicize_strings=1
+let g:gruvbox_italic='1'
+let g:gruvbox_italicize_strings='1'
+let g:gruvbox_italicize_comments='1'
+
+
 " colorscheme paramount
 " colorscheme OceanicNext
 " let g:seoul256_background = 235
@@ -146,15 +151,22 @@ set laststatus=2
 " look `:help updatetime`
 set updatetime=100
 
+
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j " Delete comment character when joining commented lines
+endif
+
 " Status line format
 " set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
-
-" ocaml settings
-set rtp+=/home/bit-wangler/.opam/system/share/merlin/vim
 
 map <space> <leader>
 " Leader key mapping to ;
 " let mapleader = ';'
+
+setlocal spell spelllang=en_us
+" Map spell correction to ctrl-L
+" imap <c-f> <c-g>u<Esc>[s1z=`]a<c-g>u
+" nmap <c-f> [s1z=<c-o>
 
 " Move a line of text using ALT+[jk] or Command+[jk] on mac
 nmap <M-j> mz:m+<cr>`z
@@ -166,6 +178,7 @@ vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 nmap <Leader>bn :bn<return>       " buffer next
 nmap <Leader>bp :bp<return>       " buffer previous
 nmap <Leader>dcb :bd<return>      " buffers delete
+" nmap <Leader>bx :bx<return>       " switch buffer viewpoint
 
 " mapping to switch splits.
 nmap <Leader>l <C-w>l
@@ -173,6 +186,7 @@ nmap <Leader>j <C-w>j
 nmap <Leader>h <C-w>h
 nmap <Leader>k <C-w>k
 nmap <Leader>wq <C-w>q
+nmap <Leader>ww <C-w>w
 
 " Open terminal in a split split
 command! Vtm vsplit | terminal
@@ -192,16 +206,6 @@ nnoremap <silent> Y y$
 " :cd. change working directory to that of the current file
 cmap cd. lcd %:p:h
 
-"this will automatically resize the terminal vim when opened
-"if !has('gui_running')
-  "if exists("+lines")
-    "set lines=72
-  "endif
-  "if exists("+columns")
-    "set columns=175
-  "endif
-"endif
-
  " Maps the key ;h to open command-t from home dir.
  " nmap <Space>h :CommandT ~/<return>
 
@@ -218,13 +222,8 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-  autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+  autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.go,*.ml :call CleanExtraSpaces()
 endif
-
-" Toggle NERDTree with ctr-n.
-map <C-n> :NERDTreeToggle<CR>
-" Exit vim if the last buffer is NERDTree
-autocmd bufenter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
 
 " comfortable-motion
 let g:comfortable_motion_friction = 0.0
@@ -242,7 +241,7 @@ let g:NERDTrimTrailingWhitespace = 1
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#auto_complete_start_length = 1
-let g:deoplete#auto_completion_delay = 3
+let g:deoplete#auto_completion_delay = 2
 let g:tern_request_timeout = 1
 
 " clang
@@ -262,7 +261,12 @@ let g:deoplete#sources#jedi#show_docstring = 1
 " Ocaml
 let g:deoplete#ignore_sources = {}
 let g:deoplete#ignore_sources.ocaml = ['buffer', 'around', 'member', 'tag']
-" let g:deoplete#omni_patterns.ocaml = '[^ ,;\t\[()\]]'
+" let g:neomake_ocaml_enabled_makers=['merlin']
+" Opam settings
+set rtp+=/home/pb/.opam/default/share/merlin/vim
+let g:neoformat_enabled_ocaml=['ocamlformat']
+
+
 
 " Rust
 let g:racer_cmd = "/home/pb/.cargo/bin/racer"
@@ -273,6 +277,21 @@ let $RUST_SRC_PATH = "/home/pb/.rust/src/rust/src"
 " let g:deoplete#sources#rust#documentation_max_height=20
 " let g:deoplete#sources#rust#disable_keymap=1
 
+" GO
+let g:deoplete#sources#go#gocode_binary = '/home/pb/go/bin/gocode'
+" let g:deoplete#sources#go#package_dot = 1
+let g:deoplete#sources#go#align_class = 1
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+
+" let g:go_fmt_command = "goimports"
+" let g:go_auto_type_info = 1
+" let g:go_fmt_fail_silently = 1
+
+" Run neoformat on save
+augroup fmt
+  autocmd!
+  autocmd BufWritePre * silent! undojoin | Neoformat
+augroup END
 
 " remap tab and shift-tab for auto-completion selection.
 inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
@@ -280,10 +299,10 @@ inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 "neomake
 " Run NeoMake on read and write operations
-if &filetype == 'c' || &filetype == 'cpp'
-    autocmd! BufReadPost,BufWritePost * Neomake
-    let g:neomake_open_list = 2
-endif
+" if &filetype != 'c' && &filetype != 'cpp'
+    " autocmd! BufReadPost,BufWritePost * Neomake
+    " let g:neomake_open_list = 2
+" endif
 
 if has("autocmd")
   au BufReadPost *.rkt,*.rktl set filetype=racket
@@ -291,27 +310,32 @@ if has("autocmd")
 endif
 
 " ale
-" let g:ale_sign_error = '>>'
-" let g:ale_sign_warning = '__'
-" let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '']
-" let g:ale_lint_on_text_changed = 0
-" let g:ale_lint_on_save = 1
-" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-" nmap <silent> <C-j> <Plug>(ale_next_wrap)
-" let g:ale_echo_msg_error_str = 'E'
-" let g:ale_echo_msg_warning_str = 'W'
-" let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '__'
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '']
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 1
+" Show 1 lines of errors (default: 10)
+let g:ale_list_window_size = 1
+" if you don't want linters to run on opening a file
+let g:ale_lint_on_enter = 0
+nmap <silent> <c-k> <plug>(ale_previous_wrap)
+nmap <silent> <c-j> <plug>(ale_next_wrap)
+let g:ale_echo_msg_error_str = 'e'
+let g:ale_echo_msg_warning_str = 'w'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:airline#extensions#ale#enabled = 1
 
 " syntastic
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
-let g:syntastic_auto_loc_list=1
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_racket_checkers = ['racket', 'scheme']
+" let g:syntastic_always_populate_loc_list=1
+" let g:syntastic_error_symbol='✗'
+" let g:syntastic_warning_symbol='⚠'
+" let g:syntastic_style_error_symbol = '✗'
+" let g:syntastic_style_warning_symbol = '⚠'
+" let g:syntastic_auto_loc_list=1
+" let g:syntastic_aggregate_errors = 1
+" let g:syntastic_check_on_wq = 0
+" let g:syntastic_racket_checkers = ['racket', 'scheme']
 
 " Set this. Airline will handle the rest.
 let g:airline#extensions#syntastic#enabled = 1
