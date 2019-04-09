@@ -18,10 +18,9 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'machakann/vim-highlightedyank'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/deoplete-clangx', { 'for': ['c', 'cpp'] }
-" Plug 'zchee/libclang-python3'
 Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
-" Plug 'eagletmt/neco-ghc'
+Plug 'eagletmt/neco-ghc'
 Plug 'copy/deoplete-ocaml', { 'for': 'ocaml' }
 " Plug 'rust-lang/rust.vim'
 Plug 'zchee/deoplete-go', { 'do': 'make'}
@@ -29,14 +28,10 @@ Plug 'fatih/vim-go',  { 'do': ':GoUpdateBinaries' }
 " Plug 'sebastianmarkow/deoplete-rust'
 " Plug 'racer-rust/vim-racer'
 " Plug 'wlangstroth/vim-racket', { 'for': 'racket' }
-" Plug 'scrooloose/syntastic', {'for': ['c', 'cpp']}
 Plug 'w0rp/ale'
 " Plug 'neomake/neomake'
 Plug 'vim-airline/vim-airline'
 Plug 'sbdchd/neoformat'
-" Plug 'wincent/command-t', {
-    " \   'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
-    " \ }
 
 call plug#end()
 
@@ -222,7 +217,7 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-  autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.go,*.ml :call CleanExtraSpaces()
+  autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.go,*.ml,*.c,*.cpp,*.h,*.hpp,*.hs :call CleanExtraSpaces()
 endif
 
 " comfortable-motion
