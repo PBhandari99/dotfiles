@@ -36,6 +36,10 @@ alias diff='colordiff'
 alias grep='grep --color=auto'
 
 alias reload-bash='source ~/.bashrc'
+alias reload-i3='i3-msg reload'
+
+
+
 # do not delete / or prompt if deleting more than 3 files at a time #
 alias rm='rm -i'
 alias rm='rm -I --preserve-root'
