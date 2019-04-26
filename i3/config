@@ -35,12 +35,6 @@ bindsym $mod+Return exec termite -e tmux
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -nb "#251c45" -sb "#D84315" -nf "#9E9D24" -sf "#FFCCBC" -p '>'
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+h focus left
@@ -89,11 +83,11 @@ bindsym $mod+Shift+s split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+# bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
-bindsym $mod+Shift+Tab layout toggle tabbed splith
+bindsym $mod+Tab layout toggle tabbed splith
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -127,7 +121,7 @@ bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
-bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+Shift+Tab workspace back_and_forth
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -174,8 +168,6 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
-bindsym $mod+r mode "resize"
-
 set $bg-color            #2f343f
 set $inactive-bg-color   #2f343f
 set $text-color          #f3f4f5
@@ -183,6 +175,16 @@ set $inactive-text-color #676E7D
 set $urgent-bg-color     #E53935
 set $very-dark-purple    #0c0c12
 set $light-purple        #7272a4
+
+# start dmenu (a program launcher)
+bindsym $mod+d exec dmenu_run -nb "#7272a4" -sb "#8a9a5b" -nf "#28281a" -sf "#FFCCBC" -p '>'
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+#
+bindsym $mod+r mode "resize"
+
 # window colors
 #                       border              background         text                 indicator
 client.focused          $bg-color           $light-purple      $very-dark-purple     #00ff00
@@ -193,8 +195,8 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-    # status_command i3status
-        status_command i3blocks -c ~/.config/i3/i3blocks.conf
+    status_command i3status -c ~/.config/i3/i3status.conf
+        # status_command i3blocks -c ~/.config/i3/i3blocks.conf
         colors {
 		background $bg-color
 	    	separator #757575
@@ -216,9 +218,9 @@ bind 121 exec --no-startup-id pactl set-sink-mute 0 toggle
 
 # Screen brightness controls
 # increase screen brightness
-bindsym XF86MonBrightnessUp exec light -A 10
+bindsym XF86MonBrightnessUp exec light -A 5
 # decrease screen brightness
-bindsym XF86MonBrightnessDown exec light -U 10
+bindsym XF86MonBrightnessDown exec light -U 5
 
 exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
 exec --no-startup-id volumeicon
