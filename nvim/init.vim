@@ -13,11 +13,7 @@ Plug 'majutsushi/tagbar', "{ 'on': 'TagbarToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'yuttie/comfortable-motion.vim'
 " Plug 'PBhandari99/nofrils'
-" Plug 'reedes/vim-colors-pencil'
 Plug 'morhetz/gruvbox'
-" Plug 'owickstrom/vim-colors-paramount'
-" Plug 'mhartington/oceanic-next'
-" Plug 'junegunn/seoul256.vim'
 Plug 'godlygeek/csapprox'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
@@ -29,7 +25,7 @@ Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 Plug 'eagletmt/neco-ghc'
 Plug 'copy/deoplete-ocaml', { 'for': 'ocaml' }
 " Plug 'rust-lang/rust.vim'
-Plug 'zchee/deoplete-go', { 'do': 'make'}
+Plug 'deoplete-plugins/deoplete-go', {'do': 'make'}
 Plug 'fatih/vim-go',  { 'do': ':GoUpdateBinaries' }
 " Plug 'sebastianmarkow/deoplete-rust'
 " Plug 'racer-rust/vim-racer'
@@ -38,26 +34,25 @@ Plug 'w0rp/ale'
 " Plug 'neomake/neomake'
 Plug 'vim-airline/vim-airline'
 Plug 'sbdchd/neoformat'
-
+Plug 'wincent/command-t', {
+    \   'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
+    \    }
+Plug 'mileszs/ack.vim'
+let g:ackprg='ag --vimgrep --ignore log --smart-case'
 call plug#end()
 
 
 set termguicolors
 syntax enable
 filetype plugin indent on
-" colorscheme nofrils-dark
-"
 set background=dark
-colorscheme gruvbox
+" colorscheme nofrils-dark
+
 let g:gruvbox_italic='1'
 let g:gruvbox_italicize_strings='1'
 let g:gruvbox_italicize_comments='1'
+colorscheme gruvbox
 
-
-" colorscheme paramount
-" colorscheme OceanicNext
-" let g:seoul256_background = 235
-" colo seoul256
 
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -164,10 +159,16 @@ map <space> <leader>
 " Leader key mapping to ;
 " let mapleader = ';'
 
+" stop a window from popping when quit if mistyped.
+map q: :q
+
 setlocal spell spelllang=en_us
 " Map spell correction to ctrl-L
 " imap <c-f> <c-g>u<Esc>[s1z=`]a<c-g>u
 " nmap <c-f> [s1z=<c-o>
+
+" toggle Tagbar
+map <C-n> :TagbarToggle<return>
 
 " Move a line of text using ALT+[jk] or Command+[jk] on mac
 nmap <M-j> mz:m+<cr>`z
@@ -208,7 +209,7 @@ nnoremap <silent> Y y$
 cmap cd. lcd %:p:h
 
  " Maps the key ;h to open command-t from home dir.
- " nmap <Space>h :CommandT ~/<return>
+ nmap <Space>f :CommandT ~/<return>
 
  " Return to last edit position when opening files
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -229,6 +230,9 @@ endif
 " comfortable-motion
 let g:comfortable_motion_friction = 0.0
 let g:comfortable_motion_air_drag = 4.0
+
+" Maps the key ;h to open command-t from home dir.
+" nmap <Leader>t :CommandT ~/<return>
 
 " NerdCommenter
 " Add spaces after comment delimiters by default
@@ -280,7 +284,6 @@ let $RUST_SRC_PATH = "/home/pb/.rust/src/rust/src"
 
 " GO
 let g:deoplete#sources#go#gocode_binary = '/home/pb/go/bin/gocode'
-" let g:deoplete#sources#go#package_dot = 1
 let g:deoplete#sources#go#align_class = 1
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 

@@ -67,9 +67,9 @@ bindsym $mod+Shift+l move right
 #     *      *      *
 #     *      *      *
 #     ***************
-bindsym $mod+Shift+v split h
+# bindsym $mod+Shift+v split h
 
-# split in vertical orientation
+# toggle split between vertical and horizontal orientation
 #     ***************
 #     *             *
 #     *             *
@@ -77,7 +77,7 @@ bindsym $mod+Shift+v split h
 #     *             *
 #     *             *
 #     ***************
-bindsym $mod+Shift+s split v
+bindsym $mod+Shift+s split toggle
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -227,3 +227,6 @@ exec --no-startup-id volumeicon
 exec --no-startup-id nm-applet
 exec_always feh --bg-fill ~/Firefox_wallpaper.png
 exec --no-startup-id i3-msg restart
+exec --no-startup-id /usr/bin/setxkbmap -option "caps:swapescape"
+exec --no-startup-id blugon
+
