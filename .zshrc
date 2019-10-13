@@ -1,3 +1,4 @@
+ZSH_TMUX_AUTOSTART=true
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -65,8 +66,12 @@ ENABLE_CORRECTION="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+        archlinux
         git
+        colored-man-pages
         zsh-autosuggestions
+        sudo
+        tmux
         )
 
 source $ZSH/oh-my-zsh.sh
@@ -92,12 +97,8 @@ source $ZSH/oh-my-zsh.sh
 # Bind keys to jump words
 # bindkey '^[' forward-word
 
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=$(go env GOPATH)
 export PATH=$PATH:/.gem
 
-export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-export PATH=/home/pb/Downloads/confluent-5.1.2/bin:$PATH
 
 PROMPT_COMMAND='echo -n -e "\033]0; ${PWD}\007"'
 /usr/bin/setxkbmap -option "caps:swapescape"
@@ -163,9 +164,6 @@ alias rm='rm -I --preserve-root'
 alias mv='mv -i'
 alias cp='cp -i'
 alias ln='ln -i'
-
-# mysql
-alias sql='mysql -h localhost -u root -pHe110SQL'
 
 alias ff='firefox'
 alias chrome='chromium'
